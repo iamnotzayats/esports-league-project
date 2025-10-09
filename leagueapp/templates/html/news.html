@@ -36,9 +36,14 @@
         <!-- Пост -->
         <div class="post {% if forloop.counter > 4 %}post-hidden{% endif %}" data-post-id="{{ post.id }}">
             <div class="post-header">
-                <img src="https://i.pravatar.cc/150?img=1" alt="Аватар" class="post-avatar">
+                <img src="{{ post.user.profile.image.url }}" alt="Аватар" class="post-avatar">
                 <div class="post-user-info">
-                    <div class="post-username">{{ post.user }}</div>
+                    <div class="post-username">
+                        {{ post.user.username }}
+                        {% if post.user.is_superuser %}
+                        <i class="bi bi-patch-check-fill verified-badge" title="Официальный аккаунт"></i>
+                        {% endif %}
+                    </div>
                     <div class="post-time">{{ post.date_pub }}</div>
                 </div>
             </div>

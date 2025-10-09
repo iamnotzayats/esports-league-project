@@ -24,6 +24,7 @@ class Profile(models.Model):
     name = models.CharField(max_length=50, null = False, blank = False, verbose_name= 'Имя')
     middlename = models.CharField(max_length=60, null=True, blank=True, verbose_name='Отчество(при наличии)')
     birthday = models.DateField(null=True, blank=True, verbose_name='Дата рождения')
+    image = models.ImageField(upload_to='images/profiles/avatars', default='default/profile/avatar/no_photo.jpg')
     
     def __str__(self):
         return f'{self.surname} {self.name} {self.middlename}'

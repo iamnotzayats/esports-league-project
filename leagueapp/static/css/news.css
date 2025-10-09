@@ -652,3 +652,47 @@ body {
         font-size: 14px;
     }
 }
+
+
+
+/* Добавьте эти стили в конец файла news.css */
+
+/* Стили для официальной галочки */
+.verified-badge {
+    color: #1DA1F2; /* Синий цвет как в Twitter */
+    font-size: 0.9em;
+    margin-left: 4px;
+    vertical-align: text-top;
+}
+
+.post-username {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+/* Анимация для галочки при наведении */
+.verified-badge {
+    transition: transform 0.2s ease;
+}
+
+.post-username:hover .verified-badge {
+    transform: scale(1.1);
+}
+
+/* Стили для галочки в навигации (для текущего пользователя) */
+.navbar-text .verified-badge {
+    font-size: 0.8em;
+    margin-left: 2px;
+}
+
+/* Адаптивные стили для галочки */
+@media (max-width: 575.98px) {
+    .verified-badge {
+        font-size: 0.8em;
+    }
+    
+    .navbar-text .verified-badge {
+        font-size: 0.75em;
+    }
+}
