@@ -1,0 +1,159 @@
+{% extends 'html/base.html' %}
+
+{% block content %}
+    <!-- Навигационная панель -->
+    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
+        <div class="container">
+            <!-- Логотип -->
+            <a class="navbar-brand" href="#">
+                <i class="bi bi-joystick"></i> EsportsLeague
+            </a>
+            
+            <!-- Кнопка для мобильных устройств -->
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <!-- Основное меню -->
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#">Новости</a>
+                    </li>
+                </ul>
+                
+                <!-- Кнопки входа/регистрации -->
+                <div class="navbar-buttons d-flex gap-2">
+                    <button class="btn btn-login" onclick="openAuthModal()">Войти</button>
+                    <button class="btn btn-register" onclick="openAuthModal()">Регистрация</button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <div class="posts-container mt-4">
+        {% for post in posts %}
+        <!-- Пост -->
+        <div class="post {% if forloop.counter > 4 %}post-hidden{% endif %}" data-post-id="{{ post.id }}">
+            <div class="post-header">
+                <img src="https://i.pravatar.cc/150?img=1" alt="Аватар" class="post-avatar">
+                <div class="post-user-info">
+                    <div class="post-username">{{ post.user }}</div>
+                    <div class="post-time">{{ post.date_pub }}</div>
+                </div>
+            </div>
+            <div class="post-content">
+                <div class="post-text collapsed" id="post-text-{{ post.id }}">
+                    {{ post.description }}
+                    <div class="text-fade" id="text-fade-{{ post.id }}"></div>
+                </div>
+                
+                <!-- Кнопка разворачивания/сворачивания -->
+                <button class="toggle-text-btn" onclick="toggleText({{ post.id }})" id="toggle-btn-{{ post.id }}">
+                    <span>Читать дальше</span>
+                    <i class="bi bi-chevron-down"></i>
+                </button>
+                
+                <!-- Блок для изображений поста -->
+                {% if post.images.all %}
+                <div id="carousel-{{ post.id }}" class="carousel slide post-images-carousel" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        {% for image in post.images.all %}
+                        <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                            <img src="{{ image.image.url }}" class="d-block w-100 post-image" alt="Изображение поста">
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    {% if post.images.all|length > 1 %}
+                    <!-- Индикаторы -->
+                    <div class="carousel-indicators">
+                        {% for image in post.images.all %}
+                        <button type="button" data-bs-target="#carousel-{{ post.id }}" data-bs-slide-to="{{ forloop.counter0 }}" 
+                                class="{% if forloop.first %}active{% endif %}" aria-current="{% if forloop.first %}true{% endif %}" 
+                                aria-label="Slide {{ forloop.counter }}"></button>
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- Кнопки навигации -->
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carousel-{{ post.id }}" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Предыдущее</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carousel-{{ post.id }}" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Следующее</span>
+                    </button>
+                    {% endif %}
+                </div>
+                {% endif %}
+                
+                <!-- Блок для тегов поста -->
+                {% if post.tags.all %}
+                <div class="post-tags">
+                    {% for tag in post.tags.all %}
+                    <span class="post-tag">#{{ tag.name }}</span>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </div>
+            <div class="post-actions">
+                <div class="post-action" onclick="handleLikeClick({{ post.id }})">
+                    <i class="bi bi-heart"></i>
+                    {% if post.likes_count > 0 %}
+                    <span class="likes-count">{{ post.likes_count }}</span>
+                    {% endif %}
+                    <span>Нравится</span>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="text-center text-muted py-5">
+            <p>Пока нет постов</p>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Кнопка загрузки дополнительных постов -->
+    {% if posts|length > 4 %}
+    <div class="load-more-container">
+        <button class="load-more-btn" id="loadMoreBtn">
+            <i class="bi bi-arrow-down"></i>
+            <span>Показать еще</span>
+        </button>
+    </div>
+    {% endif %}
+
+    <!-- Модальное окно авторизации -->
+    <div class="modal fade" id="authModal" tabindex="-1" aria-labelledby="authModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="authModalLabel">Войдите в систему</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="auth-message">
+                        <i class="bi bi-shield-lock"></i>
+                        <h4>Требуется авторизация</h4>
+                        <p>Чтобы ставить лайки и взаимодействовать с постами, пожалуйста, войдите в свою учетную запись или зарегистрируйтесь.</p>
+                    </div>
+                    <div class="auth-buttons">
+                        <button class="btn btn-primary auth-btn" onclick="handleLogin()">
+                            <i class="bi bi-box-arrow-in-right"></i>
+                            Войти
+                        </button>
+                        <button class="btn btn-outline-primary auth-btn" onclick="handleRegister()">
+                            <i class="bi bi-person-plus"></i>
+                            Зарегистрироваться
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+{% endblock %}

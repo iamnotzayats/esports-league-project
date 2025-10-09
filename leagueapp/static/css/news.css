@@ -1,0 +1,654 @@
+:root {
+    --primary-color: #ff4655;
+    --dark-bg: #0f1923;
+    --darker-bg: #0a141b;
+    --card-bg: #1a2433;
+    --light-text: #ece8e1;
+    --gray-text: #8b949e;
+    --border-color: #2a3a50;
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: var(--light-text);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    padding-bottom: 2rem;
+}
+
+.navbar {
+    background-color: var(--darker-bg) !important;
+    padding: 0.8rem 1rem;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    border-bottom: 1px solid rgba(255, 70, 85, 0.2);
+}
+
+.navbar-brand {
+    color: var(--primary-color) !important;
+    font-weight: 700;
+    font-size: 1.8rem;
+    display: flex;
+    align-items: center;
+}
+
+.navbar-brand i {
+    margin-right: 8px;
+    font-size: 1.5rem;
+}
+
+.nav-link {
+    color: var(--light-text) !important;
+    font-weight: 500;
+    margin: 0 5px;
+    transition: color 0.3s;
+    position: relative;
+}
+
+.nav-link:hover {
+    color: var(--primary-color) !important;
+}
+
+.nav-link.active {
+    color: var(--primary-color) !important;
+}
+
+.nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background-color: var(--primary-color);
+}
+
+.dropdown-menu {
+    background-color: var(--darker-bg);
+    border: 1px solid rgba(255, 70, 85, 0.3);
+}
+
+.dropdown-item {
+    color: var(--light-text);
+}
+
+.dropdown-item:hover {
+    background-color: rgba(255, 70, 85, 0.1);
+    color: var(--primary-color);
+}
+
+.navbar-toggler {
+    border: 1px solid var(--primary-color);
+    padding: 0.25rem 0.5rem;
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 2px rgba(255, 70, 85, 0.25);
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 70, 85, 1%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+.btn-login {
+    background-color: transparent;
+    border: 1px solid var(--primary-color);
+    color: var(--primary-color);
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.btn-login:hover {
+    background-color: var(--primary-color);
+    color: white;
+}
+
+.btn-register {
+    background-color: var(--primary-color);
+    border: 1px solid var(--primary-color);
+    color: white;
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.btn-register:hover {
+    background-color: #e03e4c;
+    border-color: #e03e4c;
+}
+
+/* Стили для постов */
+.posts-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+.post {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    margin-bottom: 20px;
+    overflow: hidden;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.post:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+}
+
+.post-header {
+    padding: 15px 20px 10px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.post-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 15px;
+    border: 2px solid var(--primary-color);
+}
+
+.post-user-info {
+    flex-grow: 1;
+}
+
+.post-username {
+    font-weight: 600;
+    margin-bottom: 3px;
+    color: var(--light-text);
+}
+
+.post-time {
+    font-size: 0.85rem;
+    color: var(--gray-text);
+}
+
+.post-more {
+    color: var(--gray-text);
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.post-content {
+    padding: 15px 20px;
+}
+
+.post-text {
+    margin-bottom: 15px;
+    line-height: 1.5;
+    position: relative;
+    overflow: hidden;
+}
+
+.post-text.collapsed {
+    max-height: 100px;
+}
+
+.post-text.expanded {
+    max-height: none;
+}
+
+.text-fade {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40px;
+    background: linear-gradient(transparent, var(--card-bg));
+    pointer-events: none;
+    opacity: 1;
+    transition: opacity 0.3s;
+}
+
+.text-fade.hidden {
+    opacity: 0;
+}
+
+.toggle-text-btn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    font-weight: 500;
+    padding: 5px 0;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: color 0.2s;
+}
+
+.toggle-text-btn:hover {
+    color: #ff6b78;
+}
+
+.toggle-text-btn i {
+    font-size: 0.9rem;
+    transition: transform 0.3s;
+}
+
+.toggle-text-btn.expanded i {
+    transform: rotate(180deg);
+}
+
+.post-image {
+    width: 100%;
+    border-radius: 8px;
+    margin-bottom: 15px;
+}
+
+.post-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 15px;
+}
+
+.post-tag {
+    background-color: rgba(255, 70, 85, 0.15);
+    color: var(--primary-color);
+    padding: 4px 10px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.post-stats {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 20px;
+    border-top: 1px solid var(--border-color);
+    color: var(--gray-text);
+    font-size: 0.9rem;
+}
+
+.post-actions {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px 20px;
+    border-top: 1px solid var(--border-color);
+}
+
+.post-action {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--gray-text);
+    cursor: pointer;
+    transition: color 0.2s;
+    padding: 5px 10px;
+    border-radius: 6px;
+}
+
+.post-action:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+    color: var(--light-text);
+}
+
+.post-action.liked {
+    color: var(--primary-color);
+}
+
+.post-action i {
+    font-size: 1.2rem;
+}
+
+/* Стили для карусели */
+.post-images-carousel {
+    margin-bottom: 15px;
+    border-radius: 8px;
+    overflow: hidden;
+    background-color: var(--darker-bg);
+}
+
+.carousel-inner {
+    height: 400px;
+}
+
+.carousel-item {
+    height: 100%;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 8px;
+}
+
+.carousel-indicators {
+    bottom: -35px;
+}
+
+.carousel-indicators button {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background-color: var(--gray-text);
+    margin: 0 3px;
+}
+
+.carousel-indicators button.active {
+    background-color: var(--primary-color);
+}
+
+.carousel-control-prev,
+.carousel-control-next {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.5);
+    border-radius: 50%;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.carousel-control-prev {
+    left: 10px;
+}
+
+.carousel-control-next {
+    right: 10px;
+}
+
+.post-images-carousel:hover .carousel-control-prev,
+.post-images-carousel:hover .carousel-control-next {
+    opacity: 1;
+}
+
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+    width: 20px;
+    height: 20px;
+}
+
+/* Стили для скрытых постов */
+.post-hidden {
+    display: none;
+}
+
+/* Контейнер для кнопки загрузки */
+.load-more-container {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0 40px;
+    padding: 0 15px;
+}
+
+/* Стили для кнопки загрузки */
+.load-more-btn {
+    background: linear-gradient(135deg, var(--primary-color), #ff6b78);
+    border: none;
+    color: white;
+    padding: 12px 30px;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    box-shadow: 0 4px 15px rgba(255, 70, 85, 0.3);
+}
+
+.load-more-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 70, 85, 0.4);
+    background: linear-gradient(135deg, #ff6b78, var(--primary-color));
+}
+
+.load-more-btn:active {
+    transform: translateY(0);
+}
+
+.load-more-btn.loading {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.load-more-btn.loading i {
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+/* Анимация появления постов */
+.post {
+    animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Адаптивные стили */
+@media (max-width: 575.98px) {
+    .navbar-brand {
+        font-size: 1.5rem;
+    }
+    
+    .post-header {
+        padding: 12px 15px 8px;
+    }
+    
+    .post-avatar {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .post-content {
+        padding: 12px 15px;
+    }
+    
+    .post-stats, .post-actions {
+        padding: 8px 15px;
+    }
+    
+    .carousel-inner {
+        height: 300px;
+    }
+    
+    .post-text.collapsed {
+        max-height: 80px;
+    }
+    
+    .load-more-btn {
+        padding: 10px 25px;
+        font-size: 13px;
+        width: 100%;
+        max-width: 200px;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 400px) {
+    .carousel-inner {
+        height: 250px;
+    }
+    
+    .post-text.collapsed {
+        max-height: 60px;
+    }
+}
+
+/* Обновите стили для счетчика лайков */
+.likes-count {
+    background-color: rgba(255, 70, 85, 0.2);
+    color: var(--primary-color);
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-right: 6px;
+    min-width: 22px;
+    text-align: center;
+    line-height: 1.2;
+}
+
+.post-action:hover .likes-count {
+    background-color: rgba(255, 70, 85, 0.3);
+    transform: scale(1.05);
+    transition: transform 0.2s ease;
+}
+
+/* Адаптивные стили для счетчика лайков */
+@media (max-width: 575.98px) {
+    .likes-count {
+        font-size: 0.8rem;
+        padding: 2px 7px;
+        min-width: 20px;
+        margin-right: 5px;
+    }
+}
+
+/* Добавьте эти стили в конец файла news.css */
+
+/* Стили для активного лайка */
+.post-action.liked {
+    color: var(--primary-color);
+}
+
+.post-action.liked i {
+    color: var(--primary-color);
+}
+
+/* Курсор для кнопки лайка */
+.post-action {
+    cursor: pointer;
+}
+
+/* Анимация для лайка */
+.post-action i {
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.post-action.liked i {
+    transform: scale(1.1);
+}
+
+/* Добавьте эти стили в конец файла news.css */
+
+/* Стили для модального окна авторизации */
+.modal-content {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--border-color);
+    padding: 20px 25px 15px;
+}
+
+.modal-title {
+    color: var(--light-text);
+    font-weight: 600;
+}
+
+.btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.modal-body {
+    padding: 25px;
+}
+
+.auth-message {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.auth-message i {
+    font-size: 3rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    display: block;
+}
+
+.auth-message h4 {
+    color: var(--light-text);
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.auth-message p {
+    color: var(--gray-text);
+    line-height: 1.5;
+    margin: 0;
+}
+
+.auth-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.auth-btn {
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--primary-color), #ff6b78);
+    border: none;
+}
+
+.btn-primary:hover {
+    background: linear-gradient(135deg, #ff6b78, var(--primary-color));
+    transform: translateY(-1px);
+}
+
+.btn-outline-primary {
+    border: 2px solid var(--primary-color);
+    color: var(--primary-color);
+    background: transparent;
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--primary-color);
+    color: white;
+    transform: translateY(-1px);
+}
+
+/* Адаптивные стили для модального окна */
+@media (max-width: 575.98px) {
+    .modal-dialog {
+        margin: 20px;
+    }
+    
+    .modal-body {
+        padding: 20px;
+    }
+    
+    .auth-message i {
+        font-size: 2.5rem;
+    }
+    
+    .auth-btn {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+}
