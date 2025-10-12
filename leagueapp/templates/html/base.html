@@ -10,8 +10,10 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel='stylesheet' href="{% static 'css/base.css' %}">
     <link rel='stylesheet' href="{% static 'css/news.css' %}">
     <link rel='stylesheet' href="{% static 'css/login.css' %}">
+    <link rel="shortcut icon" type="image/png" href="{% static 'images/favicons/joystick.ico' %}"/>
 </head>
 <body>
 
@@ -19,7 +21,7 @@
     <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
         <div class="container">
             <!-- Логотип -->
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{% url 'news_url' %}">
                 <i class="bi bi-joystick"></i> EsportsLeague
             </a>
             
@@ -32,19 +34,26 @@
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" href="#">Новости</a>
+                        <a class="nav-link active" href="{% url 'news_url' %}">Новости</a>
                     </li>
                 </ul>
                 
                 <!-- Кнопки входа/регистрации или информация о пользователе -->
-                <div class="navbar-buttons d-flex gap-2">
+                <div class="navbar-buttons d-flex gap-2 align-items-center">
                     {% if user.is_authenticated %}
-                        <span class="navbar-text text-light me-2">
-                            {% if user.is_staff or user.is_superuser %}
-                                <i class="bi bi-patch-check-fill verified-badge"></i>
-                            {% endif %}
-                            {{ user.username }}
-                        </span>
+                        <div class="user-profile d-flex align-items-center gap-2 me-3">
+                            <!-- Аватар пользователя -->
+                            <div class="user-avatar-nav">
+                                <img src="{{ user.profile.image.url }}" alt="Аватар {{ user.username }}" class="user-avatar-img">
+                            </div>
+                            <!-- Имя пользователя и галочка -->
+                            <span class="navbar-text text-light">
+                                {{ user.username }}
+                                {% if user.is_staff or user.is_superuser %}
+                                    <i class="bi bi-patch-check-fill verified-badge" title="Официальный аккаунт"></i>
+                                {% endif %}
+                            </span>
+                        </div>
                         <a href="{% url 'logout_url' %}" class="btn btn-logout">Выйти</a>
                     {% else %}
                         <a href="{% url 'login_url' %}" class="btn btn-login">Войти</a>
