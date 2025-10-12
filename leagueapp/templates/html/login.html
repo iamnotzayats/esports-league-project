@@ -1,35 +1,6 @@
 {% extends 'html/base.html' %}
 
 {% block content %}
-    <!-- Навигационная панель -->
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-        <div class="container">
-            <!-- Логотип -->
-            <a class="navbar-brand" href="{% url 'news_url' %}">
-                <i class="bi bi-joystick"></i> EsportsLeague
-            </a>
-            
-            <!-- Кнопка для мобильных устройств -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <!-- Основное меню -->
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{% url 'news_url' %}">Новости</a>
-                    </li>
-                </ul>
-                
-                <!-- Кнопки входа/регистрации -->
-                <div class="navbar-buttons d-flex gap-2">
-                    <a href="{% url 'login_url' %}" class="btn btn-login">Войти</a>
-                    <a href="{% url 'login_url' %}" class="btn btn-register">Регистрация</a>
-                </div>
-            </div>
-        </div>
-    </nav>
 
     <div class="auth-container">
         <div class="auth-card">

@@ -1,45 +1,16 @@
 {% extends 'html/base.html' %}
 
 {% block content %}
-    <!-- Навигационная панель -->
-    <nav class="navbar navbar-expand-lg navbar-dark sticky-top">
-        <div class="container">
-            <!-- Логотип -->
-            <a class="navbar-brand" href="#">
-                <i class="bi bi-joystick"></i> EsportsLeague
-            </a>
-            
-            <!-- Кнопка для мобильных устройств -->
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <!-- Основное меню -->
-            <div class="collapse navbar-collapse" id="navbarContent">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="#">Новости</a>
-                    </li>
-                </ul>
-                
-                <!-- Кнопки входа/регистрации или информация о пользователе -->
-                <div class="navbar-buttons d-flex gap-2">
-                    {% if user.is_authenticated %}
-                        <span class="navbar-text text-light me-2">
-                            {% if user.is_staff or user.is_superuser %}
-                                <i class="bi bi-patch-check-fill verified-badge"></i>
-                            {% endif %}
-                            {{ user.username }}
-                        </span>
-                        <a href="{% url 'logout_url' %}" class="btn btn-logout">Выйти</a>
-                    {% else %}
-                        <a href="{% url 'login_url' %}" class="btn btn-login">Войти</a>
-                        <a href="{% url 'login_url' %}" class="btn btn-register">Регистрация</a>
-                    {% endif %}
-                </div>
-            </div>
-        </div>
-    </nav>
+
+   <!-- Кнопка создания нового поста (только для суперпользователей) -->
+    {% if user.is_authenticated and user.is_superuser %}
+    <div class="new-post-container">
+        <button class="new-post-btn" id="newPostBtn">
+            <i class="bi bi-plus-circle"></i>
+            <span>Новый пост</span>
+        </button>
+    </div>
+    {% endif %}
 
     <div class="posts-container mt-4">
         {% for post in posts %}

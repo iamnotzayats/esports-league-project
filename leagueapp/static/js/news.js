@@ -247,3 +247,43 @@ document.addEventListener('DOMContentLoaded', function() {
 
 // Дополнительно: скролл наверх при загрузке страницы
 window.addEventListener('load', scrollToTop);
+
+// Функция для обработки создания нового поста
+function handleNewPost() {
+    // Здесь можно добавить логику для создания нового поста
+    // Например, открыть модальное окно или перенаправить на страницу создания
+    console.log('Создание нового поста');
+    
+    // Временное решение - можно заменить на нужную функциональность
+    alert('Функция создания поста будет реализована позже');
+}
+
+// Инициализация при загрузке страницы
+document.addEventListener('DOMContentLoaded', function() {
+    // Принудительно скроллим наверх при каждой загрузке
+    scrollToTop();
+    
+    // Находим все посты по data-атрибуту или классу
+    const posts = document.querySelectorAll('.post[data-post-id]');
+    
+    posts.forEach(function(post) {
+        initializePost(post);
+    });
+    
+    // Добавляем обработчик для кнопки загрузки
+    const loadMoreBtn = document.getElementById('loadMoreBtn');
+    if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', loadMorePosts);
+        
+        // Обновляем текст кнопки
+        const hiddenPostsCount = document.querySelectorAll('.post-hidden').length;
+        const btnText = loadMoreBtn.querySelector('span');
+        btnText.textContent = `Показать еще (${hiddenPostsCount})`;
+    }
+    
+    // Добавляем обработчик для кнопки создания поста
+    const newPostBtn = document.getElementById('newPostBtn');
+    if (newPostBtn) {
+        newPostBtn.addEventListener('click', handleNewPost);
+    }
+});
