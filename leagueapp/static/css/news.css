@@ -696,3 +696,20 @@ body {
         font-size: 0.75em;
     }
 }
+
+/* Добавьте в конец файла news.css */
+
+/* Стили для кнопки выхода */
+.btn-logout {
+    background-color: transparent;
+    border: 1px solid var(--gray-text);
+    color: var(--gray-text);
+    padding: 0.5rem 1.5rem;
+    border-radius: 4px;
+    transition: all 0.3s;
+}
+
+.btn-logout:hover {
+    background-color: var(--gray-text);
+    color: var(--dark-bg);
+}

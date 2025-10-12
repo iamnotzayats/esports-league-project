@@ -44,9 +44,14 @@ function closeAuthModal() {
     }
 }
 
+// Функция для проверки авторизации пользователя
+function checkUserAuthentication() {
+    // Используем глобальную переменную, переданную из Django
+    return window.userIsAuthenticated || false;
+}
+
 // Функция для обработки клика на лайк
 function handleLikeClick(postId) {
-    // Проверяем авторизацию пользователя
     const isAuthenticated = checkUserAuthentication();
     
     if (!isAuthenticated) {
@@ -54,60 +59,96 @@ function handleLikeClick(postId) {
         return;
     }
     
-    // Если пользователь авторизован, обрабатываем лайк
     processLike(postId);
 }
 
-// Функция для проверки авторизации пользователя
-function checkUserAuthentication() {
-    // Временная заглушка - всегда возвращает false (неавторизован)
-    // В реальном приложении здесь должна быть проверка через Django
-    return false;
+// Функция для обработки лайка
+async function processLike(postId) {
+    try {
+        const response = await fetch(`/post/${postId}/like/`, {
+            method: 'POST',
+            headers: {
+                'X-CSRFToken': getCSRFToken(),
+                'Content-Type': 'application/json',
+            },
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            updateLikeUI(postId, data.likes_count, data.user_liked);
+        } else {
+            console.error('Ошибка при установке лайка:', data.error);
+            showError('Не удалось поставить лайк');
+        }
+    } catch (error) {
+        console.error('Ошибка:', error);
+        showError('Произошла ошибка при отправке запроса');
+    }
 }
 
-// Функция для обработки лайка
-function processLike(postId) {
-    // Здесь будет логика для отправки AJAX запроса на сервер
-    console.log(`Лайк для поста ${postId}`);
-    
-    // Временная демонстрация - переключаем состояние лайка
+
+// Функция для обновления UI лайка
+function updateLikeUI(postId, likesCount, userLiked) {
     const likeElement = document.querySelector(`[onclick="handleLikeClick(${postId})"]`);
-    const heartIcon = likeElement.querySelector('i.bi-heart');
-    const likesCountElement = likeElement.querySelector('.likes-count');
-    
-    if (likeElement.classList.contains('liked')) {
-        // Убираем лайк
-        likeElement.classList.remove('liked');
-        heartIcon.classList.remove('bi-heart-fill');
-        heartIcon.classList.add('bi-heart');
-        
-        // Уменьшаем счетчик
-        if (likesCountElement) {
-            const currentCount = parseInt(likesCountElement.textContent);
-            if (currentCount > 1) {
-                likesCountElement.textContent = currentCount - 1;
-            } else {
-                likesCountElement.remove();
-            }
-        }
-    } else {
-        // Ставим лайк
+    const heartIcon = likeElement.querySelector('i');
+    let likesCountElement = likeElement.querySelector('.likes-count');
+
+    // Обновляем состояние лайка
+    if (userLiked) {
         likeElement.classList.add('liked');
         heartIcon.classList.remove('bi-heart');
         heartIcon.classList.add('bi-heart-fill');
-        
-        // Увеличиваем счетчик
+    } else {
+        likeElement.classList.remove('liked');
+        heartIcon.classList.remove('bi-heart-fill');
+        heartIcon.classList.add('bi-heart');
+    }
+
+    // Обновляем счетчик лайков
+    if (likesCount > 0) {
         if (likesCountElement) {
-            const currentCount = parseInt(likesCountElement.textContent);
-            likesCountElement.textContent = currentCount + 1;
+            likesCountElement.textContent = likesCount;
         } else {
-            // Создаем счетчик если его нет
-            const newLikesCount = document.createElement('span');
-            newLikesCount.className = 'likes-count';
-            newLikesCount.textContent = '1';
-            heartIcon.parentNode.insertBefore(newLikesCount, heartIcon.nextSibling);
+            likesCountElement = document.createElement('span');
+            likesCountElement.className = 'likes-count';
+            likesCountElement.textContent = likesCount;
+            heartIcon.parentNode.insertBefore(likesCountElement, heartIcon.nextSibling);
+        }
+    } else if (likesCountElement) {
+        likesCountElement.remove();
+    }
+
+    // Добавляем анимацию
+    heartIcon.style.transform = 'scale(1.3)';
+    setTimeout(() => {
+        heartIcon.style.transform = 'scale(1)';
+    }, 200);
+}
+
+// Функция для показа ошибок
+function showError(message) {
+    // Можно реализовать красивый показ ошибок
+    console.error(message);
+    alert(message); // Временное решение
+}
+
+
+// Функция для получения CSRF токена
+function getCSRFToken() {
+    const name = 'csrftoken';
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
         }
     }
+    return cookieValue;
 }
 
 // Функции для кнопок в модальном окне

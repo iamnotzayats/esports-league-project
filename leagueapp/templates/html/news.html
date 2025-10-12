@@ -22,10 +22,20 @@
                     </li>
                 </ul>
                 
-                <!-- Кнопки входа/регистрации -->
+                <!-- Кнопки входа/регистрации или информация о пользователе -->
                 <div class="navbar-buttons d-flex gap-2">
-                    <a href="{% url 'login_url' %}" class="btn btn-login">Войти</a>
-                    <a href="{% url 'login_url' %}" class="btn btn-register">Регистрация</a>
+                    {% if user.is_authenticated %}
+                        <span class="navbar-text text-light me-2">
+                            {% if user.is_staff or user.is_superuser %}
+                                <i class="bi bi-patch-check-fill verified-badge"></i>
+                            {% endif %}
+                            {{ user.username }}
+                        </span>
+                        <a href="{% url 'logout_url' %}" class="btn btn-logout">Выйти</a>
+                    {% else %}
+                        <a href="{% url 'login_url' %}" class="btn btn-login">Войти</a>
+                        <a href="{% url 'login_url' %}" class="btn btn-register">Регистрация</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -103,8 +113,8 @@
                 {% endif %}
             </div>
             <div class="post-actions">
-                <div class="post-action" onclick="handleLikeClick({{ post.id }})">
-                    <i class="bi bi-heart"></i>
+                <div class="post-action {% if post.user_liked %}liked{% endif %}" onclick="handleLikeClick({{ post.id }})">
+                    <i class="bi {% if post.user_liked %}bi-heart-fill{% else %}bi-heart{% endif %}"></i>
                     {% if post.likes_count > 0 %}
                     <span class="likes-count">{{ post.likes_count }}</span>
                     {% endif %}

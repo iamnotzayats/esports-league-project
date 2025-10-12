@@ -43,7 +43,7 @@
                 {% csrf_token %}
                 <div class="form-group">
                     <label for="username">Имя пользователя</label>
-                    <input type="text" id="username" name="username" required class="form-control" placeholder="Введите имя пользователя">
+                    <input type="text" id="username" name="username" required class="form-control" placeholder="Введите имя пользователя" value="{{ request.POST.username }}">
                 </div>
                 
                 <div class="form-group">

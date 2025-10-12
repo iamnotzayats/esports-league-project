@@ -6,6 +6,8 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
-    path('', views.NewsPageView, name = 'news_url'),
+    path('', views.NewsPageView, name='news_url'),
     path('login/', views.UserLoginView, name='login_url'),
-]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('logout/', views.UserLogoutView, name='logout_url'),
+    path('post/<int:post_id>/like/', views.toggle_like, name='toggle_like'),
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
