@@ -22,3 +22,6 @@ def NewsPageView(request):
         'page_title': 'Новости', 
         'posts': posts
     })
+    
+def UserLoginView(request):
+    return render(request, 'html/login.html')

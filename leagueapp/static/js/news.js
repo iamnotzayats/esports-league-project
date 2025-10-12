@@ -112,17 +112,11 @@ function processLike(postId) {
 
 // Функции для кнопок в модальном окне
 function handleLogin() {
-    console.log('Переход на страницу входа');
-    // В реальном приложении: window.location.href = '/login/';
-    closeAuthModal();
-    // Здесь можно добавить редирект на страницу логина
+    window.location.href = "{% url 'login_url' %}";
 }
 
 function handleRegister() {
-    console.log('Переход на страницу регистрации');
-    // В реальном приложении: window.location.href = '/register/';
-    closeAuthModal();
-    // Здесь можно добавить редирект на страницу регистрации
+    window.location.href = "{% url 'login_url' %}";
 }
 
 // Функция для загрузки дополнительных постов

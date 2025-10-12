@@ -7,4 +7,5 @@ from . import views
 
 urlpatterns = [
     path('', views.NewsPageView, name = 'news_url'),
+    path('login/', views.UserLoginView, name='login_url'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

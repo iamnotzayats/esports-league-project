@@ -24,8 +24,8 @@
                 
                 <!-- Кнопки входа/регистрации -->
                 <div class="navbar-buttons d-flex gap-2">
-                    <button class="btn btn-login" onclick="openAuthModal()">Войти</button>
-                    <button class="btn btn-register" onclick="openAuthModal()">Регистрация</button>
+                    <a href="{% url 'login_url' %}" class="btn btn-login">Войти</a>
+                    <a href="{% url 'login_url' %}" class="btn btn-register">Регистрация</a>
                 </div>
             </div>
         </div>
@@ -144,21 +144,17 @@
                         <p>Чтобы ставить лайки и взаимодействовать с постами, пожалуйста, войдите в свою учетную запись или зарегистрируйтесь.</p>
                     </div>
                     <div class="auth-buttons">
-                        <button class="btn btn-primary auth-btn" onclick="handleLogin()">
+                        <a href="{% url 'login_url' %}" class="btn btn-primary auth-btn">
                             <i class="bi bi-box-arrow-in-right"></i>
                             Войти
-                        </button>
-                        <button class="btn btn-outline-primary auth-btn" onclick="handleRegister()">
+                        </a>
+                        <a href="{% url 'login_url' %}" class="btn btn-outline-primary auth-btn">
                             <i class="bi bi-person-plus"></i>
                             Зарегистрироваться
-                        </button>
+                        </a>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 {% endblock %}
