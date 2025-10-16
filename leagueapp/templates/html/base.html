@@ -11,6 +11,7 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
     <link rel='stylesheet' href="{% static 'css/base.css' %}">
+    <link rel='stylesheet' href="{% static 'css/disciplines.css' %}">
     <link rel='stylesheet' href="{% static 'css/news.css' %}">
     <link rel='stylesheet' href="{% static 'css/login.css' %}">
     <link rel="shortcut icon" type="image/png" href="{% static 'images/favicons/joystick.ico' %}"/>
@@ -34,7 +35,10 @@
             <div class="collapse navbar-collapse" id="navbarContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'news_url' %}">Новости</a>
+                        <a class="nav-link" href="{% url 'news_url' %}">Новости</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'disciplines_url' %}">Дисциплины</a>
                     </li>
                 </ul>
                 

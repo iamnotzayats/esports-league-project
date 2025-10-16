@@ -1,0 +1,137 @@
+{% extends 'html/base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="disciplines-container">
+    <div class="container">
+        <!-- Сетка дисциплин -->
+        <div class="row justify-content-center">
+            <!-- CS 2 -->
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="discipline-card" data-game="cs2">
+                    <div class="card-header">
+                        <h3 class="game-title">Counter-Strike 2</h3>
+                        <div class="game-status">Командный зачёт</div>
+                    </div>
+                    <div class="card-image">
+                        <img src="{% static 'images/disciplines/cs2.jpg' %}" alt="Counter-Strike 2" class="game-image">
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="card-body">
+                        <p class="game-description">
+                            Тактический шутер от первого лица. Командная игра, где важны стратегия, 
+                            точность и координация действий.
+                        </p>
+                        <div class="game-stats">
+                            <div class="stat">
+                                <span class="stat-value">5v5</span>
+                                <span class="stat-label">Формат</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">FPS</span>
+                                <span class="stat-label">Жанр</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">PC</span>
+                                <span class="stat-label">Платформа</span>
+                            </div>
+                        </div>
+                        <div class="tournament-rules">
+                            <h5>Особенности:</h5>
+                            <ul>
+                                <li>Командные соревнования между цехами</li>
+                                <li>Турнирная сетка на выбывание</li>
+                                <li>Стандартные соревновательные правила</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Dota 2 -->
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="discipline-card" data-game="dota2">
+                    <div class="card-header">
+                        <h3 class="game-title">Dota 2</h3>
+                        <div class="game-status">Командный зачёт</div>
+                    </div>
+                    <div class="card-image">
+                        <img src="{% static 'images/disciplines/dota2.jpg' %}" alt="Dota 2" class="game-image">
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="card-body">
+                        <p class="game-description">
+                            Многопользовательская онлайн-батальная арена. Собирайте героев, 
+                            развивайте тактику и уничтожайте вражеский трон.
+                        </p>
+                        <div class="game-stats">
+                            <div class="stat">
+                                <span class="stat-value">5v5</span>
+                                <span class="stat-label">Формат</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">MOBA</span>
+                                <span class="stat-label">Жанр</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">PC</span>
+                                <span class="stat-label">Платформа</span>
+                            </div>
+                        </div>
+                        <div class="tournament-rules">
+                            <h5>Особенности:</h5>
+                            <ul>
+                                <li>Командная стратегия и координация</li>
+                                <li>Групповая стадия и плей-офф</li>
+                                <li>Captain's Mode драфт</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FIFA -->
+            <div class="col-md-6 col-lg-4 mb-4">
+                <div class="discipline-card" data-game="fifa">
+                    <div class="card-header">
+                        <h3 class="game-title">EA Sports FC</h3>
+                        <div class="game-status">Личный зачёт</div>
+                    </div>
+                    <div class="card-image">
+                        <img src="{% static 'images/disciplines/fc24.jpg' %}" alt="EA Sports FC" class="game-image">
+                        <div class="image-overlay"></div>
+                    </div>
+                    <div class="card-body">
+                        <p class="game-description">
+                            Футбольный симулятор. Создавайте свою команду, участвуйте в турнирах 
+                            и станьте легендой виртуального футбола.
+                        </p>
+                        <div class="game-stats">
+                            <div class="stat">
+                                <span class="stat-value">1v1</span>
+                                <span class="stat-label">Формат</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">Спорт</span>
+                                <span class="stat-label">Жанр</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-value">PS 5</span>
+                                <span class="stat-label">Платформа</span>
+                            </div>
+                        </div>
+                        <div class="tournament-rules">
+                            <h5>Особенности:</h5>
+                            <ul>
+                                <li>Личное первенство среди сотрудников</li>
+                                <li>Турнирная сетка на выбывание</li>
+                                <li>Очки идут в зачёт подразделения</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

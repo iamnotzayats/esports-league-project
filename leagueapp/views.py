@@ -140,3 +140,6 @@ def UserLoginView(request):
 def UserLogoutView(request):
     logout(request)
     return redirect('news_url')
+
+def DisciplinesView(request):
+    return render(request, 'html/disciplines.html')

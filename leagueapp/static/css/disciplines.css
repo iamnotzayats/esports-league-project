@@ -1,0 +1,193 @@
+/* disciplines.css */
+.disciplines-container {
+    padding: 2rem 0;
+    min-height: calc(100vh - 76px);
+}
+
+/* Карточки дисциплин */
+.discipline-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.discipline-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 15px 35px rgba(255, 70, 85, 0.15);
+    border-color: var(--primary-color);
+}
+
+/* Заголовок карточки */
+.card-header {
+    padding: 1.5rem 1.5rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.game-title {
+    color: var(--light-text);
+    font-weight: 600;
+    font-size: 1.5rem;
+    margin: 0 0 0.5rem 0;
+}
+
+.game-status {
+    display: inline-block;
+    background: rgba(255, 70, 85, 0.2);
+    color: var(--primary-color);
+    padding: 0.3rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Стили для изображения карточки */
+.card-image {
+    position: relative;
+    height: 200px;
+    overflow: hidden;
+}
+
+.game-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+}
+
+.discipline-card:hover .game-image {
+    transform: scale(1.05);
+}
+
+.image-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        to bottom,
+        rgba(15, 25, 35, 0.1) 0%,
+        rgba(15, 25, 35, 0.3) 50%,
+        rgba(15, 25, 35, 0.7) 100%
+    );
+    transition: opacity 0.3s ease;
+}
+
+.discipline-card:hover .image-overlay {
+    opacity: 0.8;
+}
+
+.card-body {
+    padding: 1.5rem;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-description {
+    color: var(--gray-text);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.game-stats {
+    display: flex;
+    justify-content: space-around;
+    background: rgba(255, 70, 85, 0.1);
+    border-radius: 12px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border: 1px solid rgba(255, 70, 85, 0.2);
+}
+
+.stat {
+    text-align: center;
+}
+
+.stat-value {
+    display: block;
+    color: var(--primary-color);
+    font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.stat-label {
+    display: block;
+    color: var(--gray-text);
+    font-size: 0.8rem;
+    margin-top: 0.25rem;
+}
+
+.tournament-rules {
+    margin-top: auto;
+}
+
+.tournament-rules h5 {
+    color: var(--light-text);
+    font-size: 1rem;
+    margin-bottom: 0.8rem;
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 0.5rem;
+}
+
+.tournament-rules ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.tournament-rules li {
+    color: var(--gray-text);
+    font-size: 0.9rem;
+    line-height: 1.5;
+    margin-bottom: 0.5rem;
+    padding-left: 1rem;
+    position: relative;
+}
+
+.tournament-rules li:before {
+    content: "•";
+    color: var(--primary-color);
+    position: absolute;
+    left: 0;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .card-image {
+        height: 180px;
+    }
+    
+    .game-title {
+        font-size: 1.3rem;
+    }
+    
+    .card-header {
+        padding: 1.2rem 1.2rem 0.8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .disciplines-container {
+        padding: 1rem 0;
+    }
+    
+    .card-image {
+        height: 160px;
+    }
+    
+    .game-stats {
+        flex-direction: column;
+        gap: 0.5rem;
+    }
+    
+    .card-header {
+        padding: 1rem 1rem 0.5rem;
+    }
+}
