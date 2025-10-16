@@ -54,7 +54,10 @@
                                 {% endif %}
                             </span>
                         </div>
-                        <a href="{% url 'logout_url' %}" class="btn btn-logout">Выйти</a>
+                        <a href="{% url 'logout_url' %}" class="btn btn-logout">
+                            <i class="bi bi-box-arrow-right"></i>
+                            Выйти
+                        </a>
                     {% else %}
                         <a href="{% url 'login_url' %}" class="btn btn-login">Войти</a>
                         <a href="{% url 'login_url' %}" class="btn btn-register">Регистрация</a>

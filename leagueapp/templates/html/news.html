@@ -3,12 +3,13 @@
 {% block content %}
 
    <!-- Кнопка создания нового поста (только для суперпользователей) -->
+    <!-- Кнопка создания нового поста (только для суперпользователей) -->
     {% if user.is_authenticated and user.is_superuser %}
     <div class="new-post-container">
-        <button class="new-post-btn" id="newPostBtn">
+        <a href="{% url 'add_new_post_url' %}" class="new-post-btn" id="newPostBtn">
             <i class="bi bi-plus-circle"></i>
             <span>Новый пост</span>
-        </button>
+        </a>
     </div>
     {% endif %}
 

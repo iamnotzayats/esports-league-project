@@ -1,11 +1,24 @@
 from .models import *
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.db.models import Count, Q
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseForbidden
 from django.views.decorators.http import require_POST
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
+from django.core.files.storage import FileSystemStorage
+import os
+
+def superuser_required(function=None):
+    """Декоратор для проверки, что пользователь - суперпользователь"""
+    actual_decorator = user_passes_test(
+        lambda u: u.is_active and u.is_superuser,
+        login_url='news_url',
+        redirect_field_name=None
+    )
+    if function:
+        return actual_decorator(function)
+    return actual_decorator
 
 def NewsPageView(request):
     posts = Posts.objects.filter(
@@ -30,6 +43,45 @@ def NewsPageView(request):
         'page_title': 'Новости', 
         'posts': posts
     })
+
+# views.py
+@login_required
+@superuser_required
+def AddNewPostView(request):
+    if request.method == 'POST':
+        description = request.POST.get('description')
+        tags = request.POST.get('tags', '')
+        images = request.FILES.getlist('images')  # getlist для получения всех файлов
+        
+        if not description:
+            messages.error(request, 'Описание поста не может быть пустым')
+            return render(request, 'html/add_new_post.html')
+        
+        try:
+            # Создаем пост
+            post = Posts.objects.create(
+                description=description,
+                user=request.user
+            )
+            
+            # Добавляем теги
+            if tags:
+                post.tags.set([tag.strip() for tag in tags.split(',') if tag.strip()])
+            
+            # Сохраняем ВСЕ изображения
+            for image in images:
+                if image:  # Проверяем, что файл был загружен
+                    PostsImages.objects.create(
+                        post=post,
+                        image=image
+                    )
+            
+            return redirect('news_url')
+            
+        except Exception as e:
+            messages.error(request, f'Ошибка при создании поста: {str(e)}')
+    
+    return render(request, 'html/add_new_post.html')
 
 @require_POST
 @login_required
@@ -79,15 +131,12 @@ def UserLoginView(request):
         
         if user is not None:
             login(request, user)
-            # Убрано сообщение о успешном входе
             return redirect('news_url')
         else:
-            # Оставляем только сообщение об ошибке
             messages.error(request, 'Неверное имя пользователя или пароль')
     
     return render(request, 'html/login.html')
 
 def UserLogoutView(request):
     logout(request)
-    # Убрано сообщение о успешном выходе
     return redirect('news_url')

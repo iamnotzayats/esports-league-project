@@ -57,11 +57,11 @@ class Posts(models.Model):
 
 
 class PostsImages(models.Model):
-    post = models.ForeignKey(Posts, on_delete=models.DO_NOTHING, verbose_name='Пост', related_name='images')
-    image = models.ImageField(upload_to= 'images/posts', null=False, blank=False, verbose_name='Фотографии поста')
+    post = models.ForeignKey(Posts, on_delete=models.CASCADE, verbose_name='Пост', related_name='images')  # Измените DO_NOTHING на CASCADE
+    image = models.ImageField(upload_to='images/posts', null=False, blank=False, verbose_name='Фотографии поста')
     
     def __str__(self):
-        return self.post.description
+        return f"Image for {self.post.description}"
     
     class Meta:
         verbose_name_plural = 'Фотографии постов'

@@ -1,0 +1,599 @@
+{% extends 'html/base.html' %}
+{% load static %}
+
+{% block content %}
+{% if not user.is_authenticated or not user.is_superuser %}
+<div class="access-denied-container">
+    <div class="access-denied-card">
+        <i class="bi bi-shield-exclamation"></i>
+        <h2>Доступ запрещен</h2>
+        <p>Только администраторы могут создавать посты</p>
+        <a href="{% url 'news_url' %}" class="btn btn-primary">
+            <i class="bi bi-arrow-left"></i>
+            Вернуться к новостям
+        </a>
+    </div>
+</div>
+
+<style>
+.access-denied-container {
+    max-width: 500px;
+    margin: 50px auto;
+    padding: 0 15px;
+}
+
+.access-denied-card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    padding: 40px 30px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.access-denied-card i {
+    font-size: 4rem;
+    color: #ff6b78;
+    margin-bottom: 20px;
+    display: block;
+}
+
+.access-denied-card h2 {
+    color: var(--light-text);
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+.access-denied-card p {
+    color: var(--gray-text);
+    margin-bottom: 25px;
+    font-size: 1rem;
+}
+</style>
+{% else %}
+<div class="create-post-container">
+    <div class="create-post-card">
+        <div class="create-post-header">
+            <i class="bi bi-plus-circle"></i>
+            <h2>Создать новый пост</h2>
+            <p>Поделитесь новостью с сообществом</p>
+        </div>
+        
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            <div class="alert alert-{% if message.tags == 'error' %}error{% else %}success{% endif %}">
+                {{ message }}
+            </div>
+            {% endfor %}
+        </div>
+        {% endif %}
+        
+        <form method="post" class="create-post-form" enctype="multipart/form-data">
+            {% csrf_token %}
+            
+            <div class="form-group">
+                <label for="description">Описание поста *</label>
+                <textarea id="description" name="description" required class="form-control" placeholder="Напишите что-нибудь интересное..." rows="6">{{ request.POST.description }}</textarea>
+                <div class="char-counter">
+                    <span id="charCount">0</span> символов
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="tags">Теги</label>
+                <input type="text" id="tags" name="tags" class="form-control" placeholder="киберспорт, турнир, новости (через запятую)" value="{{ request.POST.tags }}">
+                <div class="form-hint">
+                    Добавьте теги через запятую для лучшего поиска
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="images">Изображения</label>
+                <div class="file-upload-area" id="fileUploadArea">
+                    <i class="bi bi-cloud-arrow-up"></i>
+                    <p class="upload-text">Перетащите сюда изображения или нажмите для выбора</p>
+                    <p class="upload-hint">Можно выбрать несколько изображений (максимум 10)</p>
+                    <input type="file" id="images" name="images" class="file-input" multiple accept="image/*">
+                </div>
+                <div class="selected-files-info">
+                    <span id="fileCount">0 файлов выбрано</span>
+                    <button type="button" id="clearFiles" class="clear-files-btn">Очистить</button>
+                </div>
+                <div id="imagePreview" class="image-preview"></div>
+            </div>
+            
+            <div class="form-actions">
+                <a href="{% url 'news_url' %}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i>
+                    Назад
+                </a>
+                <button type="submit" class="btn btn-primary create-post-submit">
+                    <i class="bi bi-send"></i>
+                    Опубликовать
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+.create-post-container {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 0 15px;
+}
+
+.create-post-card {
+    background-color: var(--card-bg);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    padding: 30px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+}
+
+.create-post-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.create-post-header i {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    display: block;
+}
+
+.create-post-header h2 {
+    color: var(--light-text);
+    margin-bottom: 8px;
+    font-weight: 600;
+    font-size: 1.6rem;
+}
+
+.create-post-header p {
+    color: var(--gray-text);
+    margin: 0;
+    font-size: 0.95rem;
+}
+
+.create-post-form {
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    color: var(--light-text);
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    background-color: var(--darker-bg);
+    color: var(--light-text);
+    font-size: 14px;
+    transition: all 0.3s ease;
+    box-sizing: border-box;
+    resize: vertical;
+}
+
+.form-control:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(255, 70, 85, 0.2);
+}
+
+.form-control::placeholder {
+    color: var(--gray-text);
+}
+
+.char-counter {
+    text-align: right;
+    margin-top: 5px;
+    color: var(--gray-text);
+    font-size: 0.85rem;
+}
+
+.form-hint {
+    margin-top: 5px;
+    color: var(--gray-text);
+    font-size: 0.85rem;
+    font-style: italic;
+}
+
+/* Стили для области загрузки файлов */
+.file-upload-area {
+    border: 2px dashed var(--border-color);
+    border-radius: 8px;
+    padding: 40px 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    background-color: var(--darker-bg);
+}
+
+.file-upload-area:hover {
+    border-color: var(--primary-color);
+    background-color: rgba(255, 70, 85, 0.05);
+}
+
+.file-upload-area.dragover {
+    border-color: var(--primary-color);
+    background-color: rgba(255, 70, 85, 0.1);
+}
+
+.file-upload-area i {
+    font-size: 2.5rem;
+    color: var(--primary-color);
+    margin-bottom: 15px;
+    display: block;
+}
+
+.upload-text {
+    color: var(--light-text);
+    font-weight: 500;
+    margin-bottom: 8px;
+    font-size: 1rem;
+}
+
+.upload-hint {
+    color: var(--gray-text);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+.file-input {
+    display: none;
+}
+
+/* Информация о выбранных файлах */
+.selected-files-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 15px;
+    padding: 10px 15px;
+    background-color: rgba(255, 70, 85, 0.1);
+    border-radius: 6px;
+    color: var(--primary-color);
+    font-size: 0.9rem;
+}
+
+.clear-files-btn {
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    font-size: 0.85rem;
+    text-decoration: underline;
+    transition: color 0.2s;
+}
+
+.clear-files-btn:hover {
+    color: #ff6b78;
+}
+
+/* Превью изображений */
+.image-preview {
+    margin-top: 15px;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 10px;
+}
+
+.preview-image-container {
+    position: relative;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.preview-image {
+    width: 100%;
+    height: 100px;
+    object-fit: cover;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+}
+
+.remove-image {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: rgba(0, 0, 0, 0.7);
+    border: none;
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    color: white;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    transition: background-color 0.2s;
+}
+
+.remove-image:hover {
+    background-color: rgba(255, 70, 85, 0.8);
+}
+
+.form-actions {
+    display: flex;
+    gap: 15px;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+.btn {
+    padding: 12px 25px;
+    border-radius: 8px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.btn-secondary {
+    background-color: var(--darker-bg);
+    color: var(--light-text);
+    border: 1px solid var(--border-color);
+}
+
+.btn-secondary:hover {
+    background-color: var(--border-color);
+    transform: translateY(-1px);
+    color: var(--light-text);
+}
+
+.create-post-submit {
+    background: linear-gradient(135deg, var(--primary-color), #ff6b78);
+    color: white;
+}
+
+.create-post-submit:hover {
+    background: linear-gradient(135deg, #ff6b78, var(--primary-color));
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 70, 85, 0.4);
+}
+
+.alert {
+    padding: 12px 16px;
+    border-radius: 8px;
+    border: none;
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+}
+
+.alert-error {
+    background-color: rgba(220, 53, 69, 0.2);
+    color: #dc3545;
+    border-left: 4px solid #dc3545;
+}
+
+.alert-success {
+    background-color: rgba(40, 167, 69, 0.2);
+    color: #28a745;
+    border-left: 4px solid #28a745;
+}
+
+@media (max-width: 575.98px) {
+    .create-post-container {
+        padding: 0 10px;
+        margin: 10px auto;
+    }
+    
+    .create-post-card {
+        padding: 20px;
+    }
+    
+    .form-actions {
+        flex-direction: column;
+    }
+    
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .image-preview {
+        grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+    }
+    
+    .preview-image {
+        height: 80px;
+    }
+}
+</style>
+
+<script>
+// Счетчик символов
+document.getElementById('description').addEventListener('input', function() {
+    const charCount = this.value.length;
+    document.getElementById('charCount').textContent = charCount;
+});
+
+// Элементы DOM
+const fileInput = document.getElementById('images');
+const fileUploadArea = document.getElementById('fileUploadArea');
+const imagePreview = document.getElementById('imagePreview');
+const fileCount = document.getElementById('fileCount');
+const clearFilesBtn = document.getElementById('clearFiles');
+const form = document.querySelector('.create-post-form');
+
+let selectedFiles = [];
+
+// Обработчик клика по области загрузки
+fileUploadArea.addEventListener('click', () => {
+    fileInput.click();
+});
+
+// Обработчик изменения файлов
+fileInput.addEventListener('change', handleFileSelect);
+
+// Drag and Drop функционал
+fileUploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    fileUploadArea.classList.add('dragover');
+});
+
+fileUploadArea.addEventListener('dragleave', () => {
+    fileUploadArea.classList.remove('dragover');
+});
+
+fileUploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    fileUploadArea.classList.remove('dragover');
+    
+    if (e.dataTransfer.files.length > 0) {
+        fileInput.files = e.dataTransfer.files;
+        handleFileSelect({ target: fileInput });
+    }
+});
+
+
+// Обработчик выбора файлов
+function handleFileSelect(e) {
+    const files = Array.from(e.target.files);
+    
+    // Проверка количества файлов
+    if (files.length > 10) {
+        alert('Можно загрузить не более 10 изображений');
+        fileInput.value = '';
+        return;
+    }
+    
+    // Проверка типа файлов
+    const validFiles = files.filter(file => file.type.startsWith('image/'));
+    
+    if (validFiles.length !== files.length) {
+        alert('Некоторые файлы не являются изображениями и будут проигнорированы');
+    }
+    
+    // Добавляем новые файлы к существующим, а не заменяем
+    const newFiles = [...selectedFiles, ...validFiles];
+    
+    // Проверяем общее количество
+    if (newFiles.length > 10) {
+        alert('Общее количество изображений не может превышать 10');
+        return;
+    }
+    
+    selectedFiles = newFiles;
+    updateFileInput();
+    updateFileCount();
+    renderImagePreviews();
+}
+
+function updateFileInput() {
+    const dataTransfer = new DataTransfer();
+    selectedFiles.forEach(file => dataTransfer.items.add(file));
+    fileInput.files = dataTransfer.files;
+}
+
+// Обновление счетчика файлов
+function updateFileCount() {
+    const count = selectedFiles.length;
+    fileCount.textContent = `${count} ${getFileWord(count)} выбрано`;
+    clearFilesBtn.style.display = count > 0 ? 'block' : 'none';
+}
+
+// Склонение слова "файл"
+function getFileWord(count) {
+    if (count % 10 === 1 && count % 100 !== 11) return 'файл';
+    if (count % 10 >= 2 && count % 10 <= 4 && (count % 100 < 10 || count % 100 >= 20)) return 'файла';
+    return 'файлов';
+}
+
+// Отрисовка превью изображений
+function renderImagePreviews() {
+    imagePreview.innerHTML = '';
+    
+    selectedFiles.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const container = document.createElement('div');
+            container.className = 'preview-image-container';
+            
+            const img = document.createElement('img');
+            img.src = e.target.result;
+            img.className = 'preview-image';
+            img.alt = 'Preview';
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-image';
+            removeBtn.innerHTML = '×';
+            removeBtn.type = 'button';
+            removeBtn.onclick = () => removeImage(index);
+            
+            container.appendChild(img);
+            container.appendChild(removeBtn);
+            imagePreview.appendChild(container);
+        };
+        reader.readAsDataURL(file);
+    });
+}
+
+// Удаление изображения из превью
+function removeImage(index) {
+    selectedFiles.splice(index, 1);
+    updateFileInput();
+    updateFileCount();
+    renderImagePreviews();
+}
+
+// Очистка всех файлов
+clearFilesBtn.addEventListener('click', () => {
+    selectedFiles = [];
+    fileInput.value = '';
+    updateFileCount();
+    imagePreview.innerHTML = '';
+});
+
+// Инициализация - добавьте в конец script
+document.addEventListener('DOMContentLoaded', function() {
+    updateFileCount();
+});
+
+// Проверка формы перед отправкой
+form.addEventListener('submit', function(e) {
+    const description = document.getElementById('description').value.trim();
+    
+    if (!description) {
+        e.preventDefault();
+        alert('Пожалуйста, заполните описание поста');
+        return;
+    }
+    
+    // Проверяем, что файлы действительно есть в input
+    if (fileInput.files.length === 0 && selectedFiles.length > 0) {
+        // Если есть расхождение, синхронизируем
+        const dataTransfer = new DataTransfer();
+        selectedFiles.forEach(file => dataTransfer.items.add(file));
+        fileInput.files = dataTransfer.files;
+    }
+    
+    // Показываем уведомление о загрузке
+    const submitBtn = document.querySelector('.create-post-submit');
+    submitBtn.innerHTML = '<i class="bi bi-hourglass-split"></i> Публикация...';
+    submitBtn.disabled = true;
+});
+
+// Инициализация
+updateFileCount();
+</script>
+{% endif %}
+{% endblock %}
